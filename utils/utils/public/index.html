@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Facebook Bot</title>
+    <style>
+        body { font-family: Arial; display:flex; margin:0; }
+        .sidebar {
+            width:300px; background:#111; color:#fff;
+            padding:20px; height:100vh;
+        }
+        .sidebar input {
+            width:100%; padding:10px; margin:8px 0;
+        }
+        .main { flex:1; padding:20px; }
+        button { padding:10px; cursor:pointer; }
+        #out { background:#eee; padding:10px; margin-top:20px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>⚙️ API SETTINGS</h3>
+    <input id="pageId" placeholder="Facebook Page ID">
+    <input id="fbToken" placeholder="Facebook Access Token">
+</div>
+
+<div class="main">
+    <h2>AI Chat → Facebook Auto Post</h2>
+
+    <input id="msg" placeholder="Type your idea..." style="width:60%;padding:10px;">
+    <button onclick="send()">Send</button>
+
+    <pre id="out"></pre>
+</div>
+
+<script>
+async function send() {
+    const message = document.getElementById("msg").value;
+
+    const data = {
+        message,
+        pageId: document.getElementById("pageId").value,
+        fbToken: document.getElementById("fbToken").value
+    };
+
+    const res = await fetch("/chat", {
+        method:"POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    document.getElementById("out").innerText = JSON.stringify(result,null,2);
+}
+</script>
+
+</body>
+</html>
